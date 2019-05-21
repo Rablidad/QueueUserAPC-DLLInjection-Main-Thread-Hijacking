@@ -5,13 +5,6 @@
 #include <cstdio>
 #include <TlHelp32.h>
 
-void WINAPI pfnAPC(ULONG_PTR parameter)
-{
-	MessageBox(NULL, TEXT("You have been pwned!\n"), NULL, MB_OK);
-	return;
-}
-
-
 DWORD ProcessInfoo(LPWSTR PName)
 {
 	HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
