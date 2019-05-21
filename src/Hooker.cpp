@@ -51,7 +51,7 @@ int wmain(int argc, LPWSTR * argv)
 {
 	// usage Hooker.exe <processname.exe> <C:\\Path\\To\\DLL.dll>
 
-	if (argc < 3)
+	if (argc != 3)
 	{
 		std::wcout << TEXT("USAGE: Hooker.exe <processname.exe> <C:\\Path\\To\\DLL.dll>") << std::endl;
 		ExitProcess(1);
