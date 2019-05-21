@@ -17,10 +17,12 @@ DWORD ProcessInfoo(LPWSTR PName)
 			if (wcsncmp(PName, Process.szExeFile, lstrlen(PName)) == 0)
 			{
 				std::wcout << TEXT("Found!") << std::endl;
+				CloseHandle(snap);
 				return Process.th32ProcessID;
 			}
 		}
 	}
+	CloseHandle(snap);
 	return (EXIT_FAILURE);
 }
 
@@ -35,11 +37,13 @@ DWORD GetThreadInfoo(DWORD PID)
 		{
 			if (thread.th32OwnerProcessID == PID)
 			{
+				CloseHandle(snap);
 				return thread.th32ThreadID;
 			}
 		}
 	}
 
+	CloseHandle(snap);
 	return (EXIT_FAILURE);
 }
 
