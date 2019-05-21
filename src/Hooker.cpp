@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <windows.h>
 #include <cstdlib>
+#include <iostream>
 #include <cstdio>
 #include <TlHelp32.h>
 
@@ -8,6 +9,26 @@ void WINAPI pfnAPC(ULONG_PTR parameter)
 {
 	MessageBox(NULL, TEXT("You have been pwned!\n"), NULL, MB_OK);
 	return;
+}
+
+
+DWORD ProcessInfoo(LPWSTR PName)
+{
+	HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	PROCESSENTRY32 Process;
+	Process.dwSize = sizeof(PROCESSENTRY32);
+	if (Process32First( snap , &Process))
+	{
+		while (Process32Next(snap , &Process))
+		{
+			if (wcsncmp(PName, Process.szExeFile, lstrlen(PName)) == 0)
+			{
+				std::wcout << TEXT("Found!") << std::endl;
+				return Process.th32ProcessID;
+			}
+		}
+	}
+	return (EXIT_FAILURE);
 }
 
 DWORD GetThreadInfoo(DWORD PID)
@@ -29,17 +50,25 @@ DWORD GetThreadInfoo(DWORD PID)
 	return (EXIT_FAILURE);
 }
 
-int main()
+int wmain(int argc, LPWSTR * argv)
 {
-	WCHAR DllPath[] = TEXT("C:\\Users\\Raique\\source\\repos\\queueapchooker\\Debug\\hookerdll.dll");
-	DWORD dwSize = ( lstrlenW(DllPath) + 1 ) * sizeof(wchar_t);
+	// usage Hooker.exe <processname.exe> <C:\\Path\\To\\DLL.dll>
 
-	DWORD PID = 9968;
+	if (argc < 3)
+	{
+		std::wcout << TEXT("USAGE: Hooker.exe <processname.exe> <C:\\Path\\To\\DLL.dll>") << std::endl;
+		ExitProcess(1);
+	}
+
+	WCHAR * DllPath = argv[2];
+	
+	DWORD dwSize = ( lstrlenW(DllPath) + 1 ) * sizeof(wchar_t);
+	DWORD PID = ProcessInfoo(argv[1]);
 	DWORD TID = GetThreadInfoo(PID);
-	ULONG parameter = 22;
 
 	HANDLE hThread = OpenThread(THREAD_ALL_ACCESS, FALSE, TID);
 	HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, false, PID);
+
 	if (hThread != NULL)
 	{
 		LPVOID FAddr = VirtualAllocEx(hProcess, NULL, 1000, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
