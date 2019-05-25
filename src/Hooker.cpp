@@ -78,13 +78,13 @@ int wmain(int argc, LPWSTR * argv)
 				{
 					QueueUserAPC((PAPCFUNC)ProcH, hThread,(ULONG_PTR)FAddr);
 				}
-				printf("Funcionou!\n");
+				std::cout << "Funcionou!" << std::endl;
 			}
 		}
 	}
 	else
 	{
-		printf("Nao Funcionou!\n");
+		std::cout << "Nao Funcionou!" << std::endl;
 	}
 
 	CloseHandle(hThread);
