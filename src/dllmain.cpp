@@ -1,5 +1,8 @@
 // dllmain.cpp : Define o ponto de entrada para o aplicativo DLL.
-#include "stdafx.h"
+#include <Windows.h>
+#include <stdlib>
+#include <iostream>
+#include <cstdio>
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
